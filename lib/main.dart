@@ -4,6 +4,7 @@ import 'package:states_rebuilder/states_rebuilder.dart';
 void main() => runApp(MyApp());
 
 class CounterBloc {
+  int factor = 1;
   int counter = 0;
   static final instance = CounterBloc();
 }
@@ -41,6 +42,17 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Increment factor',
+              ),
+              textAlign: TextAlign.center,
+              onChanged: (factor) => model.setState((state) {
+                state.factor = (factor?.isNotEmpty ?? false) ?
+                  int.parse(factor) : 1;
+              }),
+            ),
             Text(
               '${model.state.counter}',
               style: Theme.of(context).textTheme.display1,
@@ -49,7 +61,9 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => model.setState((state) => state.counter++),
+        onPressed: () => model.setState((state) {
+          state.counter += state.factor;
+        }),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
